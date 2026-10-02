@@ -1,0 +1,702 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Pensar con otros</title>
+<meta name="description" content="Rutina CAT (Conectar, Ampliar, Transformar) sobre el paradigma sociocultural, a partir de Cubero y Luque (2015). Fabián Bautista González, DEM-UAQ.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+/* Concepto: cuaderno cuadriculado de lectura. Columna de ~68ch, citas como anotaciones en monoespaciada,
+   lápiz azul para lo que ocurre "entre las personas" y lápiz rojo para las preguntas y las pistas. */
+/* Paleta: modo oscuro con base en la UAQ (azul marino de fondo, dorado como color principal,
+   azul claro para preguntas y pistas). */
+:root{
+  --paper:#0b1a30; --card:#11243f; --sunk:#183053;
+  --ink:#eef1f6; --ink-2:#a9b6cb; --line:#263c5f;
+  --blue:#d8b765; --blue-soft:#262f3e;
+  --red:#86b4ea; --red-soft:#16304f;
+  --grid:rgba(216,183,101,.045);
+  --display:"Instrument Serif", "Iowan Old Style", Georgia, serif;
+  --body:"Spectral", Georgia, "Times New Roman", serif;
+  --sans:"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --nav-h:58px;
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--nav-h) + 16px)}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{
+  margin:0;background-color:var(--paper);color:var(--ink);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:28px 28px;
+  font:400 1.125rem/1.62 var(--body);
+  -webkit-font-smoothing:antialiased;
+}
+img,svg{max-width:100%}
+[hidden]{display:none!important}
+a{color:var(--blue);text-underline-offset:3px}
+button,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:4px}
+h1,h2,h3{text-wrap:balance;font-weight:400;margin:0}
+p{margin:0}
+
+.wrap{max-width:1080px;margin-inline:auto;padding-inline:20px}
+.read{max-width:66ch}
+.eyebrow{font:500 .78rem/1.3 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2)}
+.cite{font:400 .8em/1 var(--mono);color:var(--ink-2);white-space:nowrap}
+.section{padding-block:72px 24px;display:grid;gap:28px}
+.sec-head{display:grid;gap:12px}
+.sec-head h2{font:400 clamp(2.4rem,6vw,3.6rem)/1 var(--display);letter-spacing:-.01em}
+.sec-head .read{color:var(--ink-2)}
+
+/* ---------- barra de navegación ---------- */
+.topbar{
+  position:sticky;top:0;z-index:20;
+  padding-top:env(safe-area-inset-top,0px);
+  background:color-mix(in srgb,var(--paper) 88%,transparent);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);
+}
+.topbar .wrap{display:flex;align-items:center;gap:20px;min-height:var(--nav-h)}
+.brand{font:400 1.35rem/1 var(--display);white-space:nowrap;text-decoration:none;color:var(--ink)}
+.brand em{color:var(--blue)}
+.nav{flex:1;min-width:0;overflow-x:auto;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav ul{display:flex;gap:4px;list-style:none;margin:0;padding:0;justify-content:flex-end}
+.nav a{display:block;padding:8px 10px;border-radius:6px;font:500 .85rem/1 var(--sans);color:var(--ink-2);text-decoration:none;white-space:nowrap}
+.nav a:hover{background:var(--sunk);color:var(--ink)}
+.nav a[aria-current="true"]{color:var(--ink);box-shadow:inset 0 -2px 0 var(--red)}
+@media (max-width:720px){.brand{display:none}.nav ul{justify-content:flex-start}}
+
+/* ---------- portada ---------- */
+.hero{padding-block:72px 40px;display:grid;gap:28px;justify-items:center;text-align:center}
+.hero h1{font:400 clamp(2.6rem,11.5vw,7.5rem)/.95 var(--display);letter-spacing:-.02em;white-space:nowrap}
+.hero h1 em{color:var(--blue)}
+.lede{font-size:clamp(1.15rem,2.2vw,1.4rem);line-height:1.5;max-width:46ch;color:var(--ink-2);margin-top:-6px}
+.ask{display:grid;gap:14px;justify-items:center;padding:28px 24px;border:1px solid var(--line);border-radius:12px;background:var(--card);width:100%;max-width:720px;margin-top:8px}
+.ask-q{font:400 clamp(1.7rem,4vw,2.3rem)/1.1 var(--display)}
+.choices{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.choice{
+  padding:10px 18px;border-radius:999px;border:1.5px solid var(--ink);background:transparent;cursor:pointer;
+  font:500 .95rem/1 var(--sans);transition:background .15s,color .15s;
+}
+.choice:hover{background:var(--sunk)}
+.choice[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.ask-r{color:var(--ink-2);min-height:1.6em;max-width:58ch}
+.ask-r strong{color:var(--ink)}
+.route{justify-self:stretch;text-align:left;list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.route a{display:grid;gap:4px;padding:12px 14px;border-top:2px solid var(--ink);text-decoration:none;color:var(--ink)}
+.route a:hover{background:var(--sunk)}
+.route .n{font:500 .75rem/1 var(--mono);color:var(--ink-2)}
+.route .t{font:600 .95rem/1.2 var(--sans)}
+.route .d{font:400 .85rem/1.35 var(--sans);color:var(--ink-2)}
+.how{font:400 .95rem/1.5 var(--sans);color:var(--ink-2);max-width:70ch}
+.byline{font:400 .85rem/1.4 var(--sans);color:var(--ink-2)}
+
+/* ---------- del diálogo a la voz interior ---------- */
+.voz{border-block:1px solid var(--line);background:color-mix(in srgb,var(--card) 70%,transparent)}
+.voz-track{position:relative}
+.voz.scroll .voz-track{height:260vh}
+.voz-sticky{padding-block:40px}
+.voz.scroll .voz-sticky{position:sticky;top:calc(var(--nav-h) + env(safe-area-inset-top,0px));min-height:calc(100vh - var(--nav-h));display:flex;align-items:center}
+.voz-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:40px;align-items:center;width:100%}
+.voz-text{display:grid;gap:16px}
+.voz-text h2{font:400 clamp(2.2rem,5vw,3.2rem)/1 var(--display)}
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:10px;counter-reset:s}
+.steps li{
+  counter-increment:s;display:grid;grid-template-columns:2rem 1fr;gap:10px;padding:10px 12px;border-radius:8px;
+  color:var(--ink-2);font-size:1rem;line-height:1.5;transition:background .2s,color .2s;
+}
+.steps li::before{content:counter(s);font:500 .8rem/1.9 var(--mono);text-align:center;border:1px solid var(--line);border-radius:50%;width:1.9rem;height:1.9rem}
+.steps li.on{background:var(--card);color:var(--ink);box-shadow:0 0 0 1px var(--line)}
+.steps li.on::before{border-color:var(--blue);color:var(--blue)}
+.steps strong{font-weight:600;color:var(--ink)}
+.stepper{display:flex;gap:8px;align-items:center;font:400 .85rem/1 var(--sans);color:var(--ink-2)}
+.stepper button{width:2.2rem;height:2.2rem;border-radius:50%;border:1px solid var(--line);background:var(--card);cursor:pointer;font:500 .85rem/1 var(--mono)}
+.stepper button[aria-current="true"]{border-color:var(--blue);color:var(--blue)}
+
+.stage{--p:0;position:relative;height:400px;border-radius:12px;background:var(--card);border:1px solid var(--line);overflow:hidden}
+.person{position:absolute;bottom:0;width:120px;transform:translateX(-50%);transition:none}
+.person svg{display:block;width:100%;height:auto}
+.person.a{left:calc(22% + 20% * var(--p));color:var(--blue)}
+.person.b{left:calc(78% - 20% * var(--p));color:var(--ink-2);opacity:calc(1 - var(--p) * 1.5)}
+.bubble{
+  position:absolute;max-width:46%;padding:12px 14px;border-radius:14px;background:var(--paper);
+  border:1.5px solid currentColor;font:400 .98rem/1.4 var(--body);
+}
+.bubble.a{left:calc(4% + 14% * var(--p));top:15%;color:var(--blue);opacity:calc(1.5 - var(--p) * 2.3)}
+.bubble.b{right:calc(4% + 14% * var(--p));top:39%;color:var(--ink-2);opacity:calc(1.5 - var(--p) * 2.3)}
+.bubble span{color:var(--ink)}
+.bubble.inner{
+  left:50%;top:17%;max-width:72%;width:max-content;border-style:dashed;color:var(--blue);
+  transform:translateX(-50%) scale(calc(.92 + .08 * var(--p)));opacity:calc((var(--p) - .58) * 3);
+  font-style:italic;
+}
+.bubble.inner span{display:block}
+.plane{position:absolute;left:50%;top:14px;transform:translateX(-50%);margin:0;padding:7px 14px;border:1px solid var(--line);border-radius:999px;background:var(--paper);white-space:nowrap;font:500 .74rem/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
+.plane b{color:var(--blue);font-weight:500}
+@media (max-width:820px){
+  .voz-grid{grid-template-columns:1fr;gap:20px}
+  .stage{height:300px}
+  .person{width:84px}
+  .bubble{font-size:.88rem;max-width:58%}
+  .voz.scroll .voz-sticky{align-items:flex-start}
+  .steps li{font-size:.92rem;padding:6px 8px}
+  .steps li:not(.on){display:none}
+  .voz-text h2{font-size:2rem}
+}
+
+/* ---------- secciones CAT ---------- */
+.scaffold{display:inline-flex;gap:6px;align-items:center;font:500 .75rem/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2)}
+.scaffold i{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--red);display:inline-block}
+.scaffold i.f{background:var(--red)}
+.task{display:grid;gap:12px;padding:22px;border-radius:12px;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--red)}
+.task label{font:400 1.45rem/1.25 var(--display)}
+.task textarea,.vote textarea{
+  width:100%;min-height:7.5em;resize:vertical;padding:12px 14px;border-radius:8px;border:1px solid var(--line);
+  background:var(--paper);font:400 1.02rem/1.5 var(--body);
+}
+.small{font:400 .82rem/1.4 var(--sans);color:var(--ink-2)}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.btn{
+  padding:10px 16px;border-radius:8px;border:1.5px solid var(--blue);background:var(--blue);color:var(--paper);cursor:pointer;
+  font:600 .9rem/1 var(--sans);
+}
+.btn:hover{filter:brightness(1.12)}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.hint{background:transparent;color:var(--red);border-color:var(--red)}
+.btn:disabled{opacity:.45;cursor:not-allowed;filter:none}
+.bar .spacer{flex:1}
+.hints{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.hints li{padding:10px 14px;border-radius:8px;background:var(--red-soft);font-size:1rem;line-height:1.5}
+.hints li b{font:600 .72rem/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--red);display:block;margin-bottom:4px}
+.reveal{display:grid;gap:18px}
+.yours{padding:16px 18px;border-radius:10px;border:1.5px dashed var(--blue);background:var(--blue-soft)}
+.yours p:last-child{white-space:pre-wrap}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.card{display:grid;align-content:start;gap:10px;padding:20px;border-radius:10px;background:var(--card);border:1px solid var(--line);min-width:0}
+.card .tag{font:500 .72rem/1.3 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--blue)}
+.card h3{font:400 1.65rem/1.1 var(--display)}
+.card p{font-size:1rem;line-height:1.55}
+.card .open{font:italic 400 1rem/1.5 var(--body);color:var(--red)}
+.card .meta{font:400 .85rem/1.4 var(--sans);color:var(--ink-2)}
+details.full{border-top:1px solid var(--line);padding-top:12px}
+details.full summary{cursor:pointer;font:600 .9rem/1.3 var(--sans);color:var(--ink-2)}
+details.full .body{display:grid;gap:14px;margin-top:14px;max-width:68ch}
+details.full .body p{font-size:1.02rem}
+.context{font:400 1rem/1.5 var(--sans);color:var(--ink-2);max-width:70ch}
+
+/* ---------- dilema ---------- */
+.dilema-q{display:grid;gap:4px;padding:26px 30px;border:1px solid var(--line);border-left:3px solid var(--blue);border-radius:12px;background:var(--card)}
+.dilema-q{font:400 clamp(1.5rem,3.3vw,2.2rem)/1.2 var(--display)}
+.dilema-q .q{display:block;text-wrap:balance}
+@media (max-width:860px){.dilema-q .br-wide{display:none}}
+@media (max-width:600px){.dilema-q{padding:20px}}
+.dilema-q em{color:var(--red)}
+.vote{display:grid;gap:16px;border:0;padding:0;margin:0}
+.vote legend{font:600 .9rem/1 var(--sans);margin-bottom:6px}
+.options{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.opt{position:relative;display:grid;gap:6px;padding:20px 22px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);cursor:pointer}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .big{font:400 2.2rem/1 var(--display)}
+.opt .desc{font:400 .95rem/1.45 var(--sans);color:var(--ink-2)}
+.opt:has(input:checked){border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-soft)}
+.opt:has(input:focus-visible){outline:2px solid var(--blue);outline-offset:3px}
+.vote label.why-l{font:600 .9rem/1 var(--sans)}
+.out{display:grid;gap:16px}
+.mine{padding:22px;border-radius:12px;background:var(--card);border:1px solid var(--line);display:grid;gap:12px}
+.mine h3{font:400 1.8rem/1.1 var(--display)}
+.forum{display:grid;gap:10px}
+.forum textarea{width:100%;min-height:8em;padding:10px;border-radius:8px;border:1px solid var(--line);background:var(--paper);font:400 .9rem/1.45 var(--mono)}
+.msg{font:500 .9rem/1.3 var(--sans);color:var(--blue)}
+
+/* ---------- referencias ---------- */
+.refs{list-style:none;margin:0;padding:0;display:grid;gap:12px;max-width:80ch}
+.refs li{padding-left:2em;text-indent:-2em;font-size:1rem;line-height:1.5}
+footer{padding-block:48px 64px;border-top:1px solid var(--line);margin-top:48px}
+footer .wrap{display:grid;gap:6px;justify-items:center;text-align:center;font:400 .88rem/1.5 var(--sans);color:var(--ink-2)}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="#inicio">Pensar <em>con otros</em></a>
+    <nav class="nav" aria-label="Secciones">
+      <ul>
+        <li><a href="#inicio">Inicio</a></li>
+        <li><a href="#voz">Voz interior</a></li>
+        <li><a href="#conectar">Conectar</a></li>
+        <li><a href="#ampliar">Ampliar</a></li>
+        <li><a href="#transformar">Transformar</a></li>
+        <li><a href="#dilema">Dilema</a></li>
+        <li><a href="#referencias">Referencias</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main>
+<!-- ===================== PORTADA ===================== -->
+<section id="inicio" class="wrap hero">
+  <p class="eyebrow">Recurso basado en mi rutina CAT y en Cubero y Luque (2015)</p>
+  <h1>Pensar <em>con otros</em></h1>
+  <p class="lede">Un recorrido por las ideas de Vygotsky para pensar la educación multimodal: primero respondes, luego comparas con mi lectura y al final tomas una posición.</p>
+
+  <div class="ask">
+    <p class="ask-q">¿Dónde ocurre el pensamiento?</p>
+    <div class="choices" role="group" aria-label="Elige una respuesta">
+      <button class="choice" type="button" data-ans="cabeza" aria-pressed="false">En cada cabeza</button>
+      <button class="choice" type="button" data-ans="entre" aria-pressed="false">Entre las personas</button>
+    </div>
+    <p class="ask-r" id="hero-r" aria-live="polite">Elige una respuesta antes de seguir.</p>
+  </div>
+
+  <ol class="route">
+    <li><a href="#voz"><span class="n">01</span><span class="t">Voz interior</span><span class="d">Cómo una conversación se vuelve pensamiento</span></a></li>
+    <li><a href="#conectar"><span class="n">02</span><span class="t">Conectar</span><span class="d">Con lo que vimos en la primera unidad</span></a></li>
+    <li><a href="#ampliar"><span class="n">03</span><span class="t">Ampliar</span><span class="d">Lo que aprendí de nuevo</span></a></li>
+    <li><a href="#transformar"><span class="n">04</span><span class="t">Transformar</span><span class="d">Cuatro cambios para mi clase</span></a></li>
+    <li><a href="#dilema"><span class="n">05</span><span class="t">Dilema</span><span class="d">¿Andamia o sólo media?</span></a></li>
+  </ol>
+
+  <p class="how">Cómo funciona: en Conectar, Ampliar y Transformar escribes primero tu respuesta y luego la comparas con la mía. Cada sección tiene menos pistas que la anterior (3, 1 y ninguna), porque así funciona el andamiaje: la ayuda se va retirando. Lo que escribas se guarda sólo en tu navegador.</p>
+  <p class="byline">Fabián Bautista González · Doctorado en Educación Multimodal, Universidad Autónoma de Querétaro · Octubre de 2026</p>
+</section>
+
+<!-- ===================== VOZ INTERIOR ===================== -->
+<section id="voz" class="voz" aria-labelledby="voz-h">
+  <div class="voz-track" id="voz-track">
+    <div class="voz-sticky">
+      <div class="wrap voz-grid">
+        <div class="voz-text">
+          <p class="eyebrow">01 · Interiorización</p>
+          <h2 id="voz-h">Del diálogo a la voz interior</h2>
+          <ol class="steps" id="voz-steps">
+            <li class="on"><span><strong>Entre dos.</strong> Una persona pregunta y otra responde. El pensamiento está afuera, en la conversación: es el plano interpsicológico.</span></li>
+            <li><span><strong>Se acercan.</strong> Poco a poco, la conversación pasa adentro. Pero no llega como una copia: al pasar, se transforma. Por eso la interiorización es “un proceso transformativo” <span class="cite">p. 143</span>.</span></li>
+            <li><span><strong>Una sola voz.</strong> Ahora la misma persona se pregunta y se responde: el diálogo se volvió pensamiento. Es el plano intrapsicológico <span class="cite">p. 143</span>. Quizá pensar filosóficamente sea, en buena parte, dialogar por dentro.</span></li>
+          </ol>
+          <div class="stepper" id="voz-stepper">
+            <span id="voz-hint">Desplázate hacia abajo para ver el cambio, o elige un momento:</span>
+            <button type="button" data-step="0" aria-current="true" aria-label="Momento 1">1</button>
+            <button type="button" data-step="1" aria-label="Momento 2">2</button>
+            <button type="button" data-step="2" aria-label="Momento 3">3</button>
+          </div>
+        </div>
+
+        <div class="stage" id="voz-stage" aria-hidden="true">
+          <div class="bubble a"><span>¿Y si pensar no ocurriera sólo dentro de cada cabeza?</span></div>
+          <div class="bubble b"><span>Entonces, primero, sería algo que hacemos juntos.</span></div>
+          <div class="bubble inner"><span>¿Y si pensar no ocurriera sólo dentro de cada cabeza?</span><span>Entonces, primero, sería algo que hacemos juntos.</span></div>
+          <div class="person a"><svg viewBox="0 0 120 150"><circle cx="60" cy="42" r="26" fill="none" stroke="currentColor" stroke-width="3"/><path d="M12 150c0-36 21-62 48-62s48 26 48 62" fill="none" stroke="currentColor" stroke-width="3"/></svg></div>
+          <div class="person b"><svg viewBox="0 0 120 150"><circle cx="60" cy="42" r="26" fill="none" stroke="currentColor" stroke-width="3"/><path d="M12 150c0-36 21-62 48-62s48 26 48 62" fill="none" stroke="currentColor" stroke-width="3"/></svg></div>
+          <p class="plane" id="voz-plane">Plano <b>interpsicológico</b></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CONECTAR ===================== -->
+<section id="conectar" class="wrap section cat" data-hints="3" aria-labelledby="c-h">
+  <header class="sec-head">
+    <p class="eyebrow">02 · Conectar</p>
+    <h2 id="c-h">Conectar</h2>
+    <p class="read">¿Qué ideas del paradigma sociocultural se relacionan con lo que vimos en la primera unidad: el contexto sociotécnico, las tecnologías digitales y la educación multimodal?</p>
+    <span class="scaffold" aria-label="Andamiaje: tres pistas">Andamiaje <i class="f"></i><i class="f"></i><i class="f"></i></span>
+  </header>
+
+  <div class="task">
+    <label for="r-conectar">Piensa en una tecnología que uses para enseñar o aprender. ¿Es sólo un medio para pasar información, o cambia tu forma de pensar o de relacionarte con otras personas?</label>
+    <textarea id="r-conectar" data-save placeholder="Escribe aquí tu respuesta."></textarea>
+    <div class="bar">
+      <button class="btn hint" type="button">Pedir una pista</button>
+      <span class="small hint-count"></span>
+      <span class="spacer"></span>
+      <button class="btn reveal-btn" type="button">Comparar con mi lectura</button>
+    </div>
+    <ol class="hints">
+      <li hidden><b>Pista 1</b>Burbules y Callister (2001) dicen que las tecnologías cambian cómo nos vemos y cómo nos relacionamos <span class="cite">p. 10</span>.</li>
+      <li hidden><b>Pista 2</b>Vygotsky da un ejemplo: cuando usamos el lenguaje para recordar, la memoria misma cambia; esa función “queda transformada” <span class="cite">Cubero y Luque, 2015, p. 150</span>.</li>
+      <li hidden><b>Pista 3</b>Dussel y Quevedo (2010) dicen que, aunque haya mucha tecnología, la guía de las personas adultas sigue siendo necesaria <span class="cite">p. 74</span>. ¿Quién o qué te guía cuando usas esa tecnología?</li>
+    </ol>
+  </div>
+
+  <div class="reveal" hidden>
+    <div class="yours" hidden><p class="eyebrow">Tu respuesta</p><p></p></div>
+    <div class="cards">
+      <article class="card">
+        <p class="tag">Burbules y Callister ↔ Mediación</p>
+        <h3>La tecnología no es neutral</h3>
+        <p>Burbules y Callister dicen que las tecnologías cambian cómo nos vemos y cómo nos relacionamos <span class="cite">2001, p. 10</span>. Vygotsky explica por qué: las herramientas psicológicas cambian las funciones que median <span class="cite">p. 150</span>. Por eso ninguna herramienta es un simple canal.</p>
+      </article>
+      <article class="card">
+        <p class="tag">Dussel y Quevedo ↔ ZDP · Apropiación</p>
+        <h3>La guía docente tiene nombre</h3>
+        <p>Dussel y Quevedo dicen que “la mediación del mundo adulto sigue siendo fundamental” <span class="cite">2010, p. 74</span>. En Vygotsky, esa idea se llama zona de desarrollo próximo: un apoyo que dan otras personas y también herramientas como libros, videos o computadoras <span class="cite">p. 145</span>. Y cuando hablan de “apropiaciones originales” <span class="cite">p. 24</span>, usan un concepto clave de este paradigma: hacer propias las herramientas <span class="cite">p. 144</span>.</p>
+      </article>
+      <article class="card">
+        <p class="tag">Mi pregunta ↔ Interiorización</p>
+        <h3>Un recurso que no aísle</h3>
+        <p>Me había preguntado cómo evitar que un recurso con experimentos mentales aísle a los y las estudiantes. Vygotsky da una buena razón: las formas de pensar más complejas (las funciones psicológicas superiores) aparecen primero “entre las personas” y sólo después en cada una <span class="cite">p. 143</span>.</p>
+      </article>
+    </div>
+    <details class="full">
+      <summary>Leer el texto completo de Conectar</summary>
+      <div class="body">
+        <p>La conexión más evidente tiene que ver con la no neutralidad de la tecnología. Burbules y Callister (2001) proponían superar la visión tecnocrática al entender que las nuevas tecnologías no son simples medios, sino “artificios que modifican las percepciones que las personas tienen de sí mismas como agentes, sus relaciones mutuas” (p. 10). El paradigma sociocultural ofrece una explicación psicológica de esa misma idea. Para Vygotsky, del mismo modo que las herramientas materiales transforman el entorno, las herramientas psicológicas median las funciones psicológicas “cambiando su naturaleza”: “si el lenguaje se introduce en una función psicológica como la memoria, dicha función queda transformada” (Cubero y Luque, 2015, p. 150). En otras palabras, un instrumento de mediación nunca es un canal neutro, pues transforma aquello que media. Los autores añaden, siguiendo a Wertsch, que la acción mediada es siempre una acción situada (p. 150), lo que dialoga con la noción de entorno sociotécnico que ya trabajamos: ese escenario en el que personas y dispositivos interactúan en lenguajes y canales diversos.</p>
+        <p>La segunda conexión es la mediación docente. En una actividad de la primera unidad de la asignatura, había definido la enseñanza como un conjunto de prácticas planeadas con la intención de mediar entre el estudiante y la cultura. Para ello me apoyé en Dussel y Quevedo (2010), para quienes “la mediación del mundo adulto sigue siendo fundamental, y quizá más todavía en esta cultura dominada por la proliferación de signos” (p. 74). Lo que en ese momento era una intuición tiene ahora un nombre preciso: la zona de desarrollo próximo (ZDP), entendida como una “estructura de apoyo creada por otras personas y por las herramientas culturales apropiadas para una situación” (Cubero y Luque, 2015, p. 145). Importa decir que los autores incluyen entre los agentes de la ZDP “artefactos como libros, vídeos, soporte informático, etc.” (p. 145). Por cierto, la palabra con la que Dussel y Quevedo (2010) describen las permisibilidades (<em>affordances</em>) de los nuevos medios, “apropiaciones originales” (p. 24), es central en este paradigma. Los seres humanos, “más que adaptarse a los fenómenos que los rodean, los hacen suyos” (Cubero y Luque, 2015, p. 144).</p>
+        <p>La tercera conexión es, quizá, la que más me importa. Ya me había preguntado en otra actividad cómo garantizar que un recurso virtual basado en experimentos mentales funcione como espacio de debate y reflexión colectiva, y no como una actividad que aísle a los y las estudiantes. El paradigma sociocultural explica por qué esa preocupación no es menor. Según la ley genética del desarrollo cultural, toda función psicológica superior aparece primero “entre las personas como una categoría interpsicológica” y sólo después en el individuo (Vygotsky, 1978, como se citó en Cubero y Luque, 2015, p. 143). Es más, “el pensamiento, el recuerdo, no pertenece nunca al sujeto, sino al individuo actuando con otros individuos, a través de los instrumentos mediacionales” (p. 144). Aprender, según la cita de Lave que recogen los autores, “no significa interiorizar un conjunto de hechos o entidades objetivas, sino participar en una serie de actividades humanas” (Lave, 1996, como se citó en Cubero y Luque, 2015, p. 154).</p>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ===================== AMPLIAR ===================== -->
+<section id="ampliar" class="wrap section cat" data-hints="1" aria-labelledby="a-h">
+  <header class="sec-head">
+    <p class="eyebrow">03 · Ampliar</p>
+    <h2 id="a-h">Ampliar</h2>
+    <p class="read">¿Qué ideas nuevas me deja este paradigma sobre el aprendizaje, la enseñanza, el conocimiento y las tecnologías como mediaciones?</p>
+    <span class="scaffold" aria-label="Andamiaje: una pista">Andamiaje <i class="f"></i><i></i><i></i></span>
+  </header>
+
+  <div class="task">
+    <label for="r-ampliar">Recuerda algo difícil que aprendiste con ayuda de alguien. ¿Qué hizo esa persona? ¿En qué momento dejó de ayudarte?</label>
+    <textarea id="r-ampliar" data-save placeholder="Escribe aquí tu respuesta."></textarea>
+    <div class="bar">
+      <button class="btn hint" type="button">Pedir una pista</button>
+      <span class="small hint-count"></span>
+      <span class="spacer"></span>
+      <button class="btn reveal-btn" type="button">Comparar con mi lectura</button>
+    </div>
+    <ol class="hints">
+      <li hidden><b>Pista</b>El andamiaje es una ayuda que se ajusta a quien aprende y que no dura para siempre: su meta es “el traspaso de responsabilidad” <span class="cite">p. 146</span>.</li>
+    </ol>
+  </div>
+
+  <div class="reveal" hidden>
+    <div class="yours" hidden><p class="eyebrow">Tu respuesta</p><p></p></div>
+    <div class="cards">
+      <article class="card" id="a-aprendizaje">
+        <p class="tag">Sobre el aprendizaje</p>
+        <h3>Interiorizar es transformar</h3>
+        <p>Interiorizar no es copiar algo de afuera hacia adentro: es “un proceso transformativo” <span class="cite">p. 143</span>. Si el diálogo de preguntas y respuestas pasa adentro, pensar filosóficamente sería, en buena parte, haber hecho propio un diálogo.</p>
+        <p class="open">Pregunta abierta: ¿esto me obliga a repensar lo que llamé una “experiencia concreta genuina” (Kolb, 1984)?</p>
+      </article>
+      <article class="card" id="a-ensenanza">
+        <p class="tag">Sobre la enseñanza</p>
+        <h3>Quien enseña orquesta</h3>
+        <p>El andamiaje es una ayuda con dos condiciones: se ajusta a lo que el aprendiz necesita y se retira a medida que avanza <span class="cite">p. 146</span>. Quien enseña no transmite, pero tampoco sólo acompaña: dirige, como en una orquesta, una comunidad de aprendices <span class="cite">p. 153</span>.</p>
+      </article>
+      <article class="card" id="a-tecnologias">
+        <p class="tag">Sobre las tecnologías</p>
+        <h3>Median, pero no se ajustan solas</h3>
+        <p>Un libro, un video o una computadora pueden ser parte de la ZDP. Entonces la pregunta ya no es si la tecnología enseña, sino qué papel cumple dentro de una actividad compartida. Un recurso digital media, pero alguien tiene que ajustar su ayuda a lo que pasa en cada aula.</p>
+        <p>Vygotsky reconoce muchas herramientas: “trabajos de arte, esquemas, diagramas, mapas, dibujos” <span class="cite">p. 150</span>. Pero para él el lenguaje es “el instrumento mediador fundamental” <span class="cite">p. 150</span>. ¿Qué lugar tienen entonces la imagen o el sonido? Es una pregunta abierta para la educación multimodal.</p>
+      </article>
+    </div>
+    <details class="full">
+      <summary>Leer el texto completo de Ampliar</summary>
+      <div class="body">
+        <p>La primera comprensión nueva tiene que ver con la interiorización. Antes de esta lectura la entendía, sin pensarlo mucho, como el paso de un contenido de afuera hacia adentro. Cubero y Luque (2015) son explícitos: “La interiorización no ha de ser entendida como una copia o transferencia, sino como un proceso transformativo” (p. 143). De hecho, se trata del proceso por el que se forma el propio plano intrapsicológico. Lo que más me interesa para la didáctica de la filosofía es un ejemplo que los autores ofrecen casi de paso: propiedades del funcionamiento interpsicológico “como el de la organización dialéctica pregunta-respuesta” pasarían a formar parte del funcionamiento interno (p. 143). Pensar filosóficamente podría ser, entonces, en buena medida, haber interiorizado un diálogo. La problematización, que Tozzi (2007) pone como primer paso del filosofar, sería primero una actividad colectiva y sólo después una capacidad individual.</p>
+        <p>Esta idea me obliga a revisar un supuesto de mi propio trabajo. En el ensayo de la unidad anterior apoyé el diseño de recursos en el ciclo de aprendizaje experiencial de Kolb (1984), cuyo punto de partida era lo que llamé una “experiencia concreta genuina”. El paradigma sociocultural sugiere que lo genuino de esa experiencia podría estar no tanto en su carácter vivencial como en que sea una actividad compartida y mediada por signos. La pregunta ahora es: ¿esto obliga a reformular la noción de experiencia desde lo sociocultural?</p>
+        <p>La segunda comprensión se refiere al papel del profesor o la profesora. El concepto de andamiaje (Wood et al., 1976, como se citó en Cubero y Luque, 2015) describe una ayuda con dos condiciones: que se ajuste a las competencias del aprendiz en cada momento y que sea transitoria. En palabras de los autores, “la retirada de la ayuda y la cesión progresiva del control al niño, de forma contingente a su progreso en la tarea, aseguran el traspaso de responsabilidad que es en sí la meta de la actividad” (p. 146). Quien enseña no transmite, pero tampoco se limita a facilitar: orquesta las actividades de una comunidad de aprendices (p. 153). Además, los y las estudiantes “pueden apropiarse de la situación en sentidos no previstos por el profesor” (p. 146), algo que me hace recordar la imprevisibilidad que Burbules y Callister (2001) atribuyen a la inclusión tecnológica.</p>
+        <p>Un tercer aspecto que comprendí tiene que ver con las tecnologías como mediaciones. Si un artefacto puede formar parte de la ZDP, ya la pregunta no es si la tecnología enseña, sino qué lugar ocupa dentro de una actividad conjunta. Un libro o un recurso digital pueden mediar, pero su ayuda requiere ajustarse a lo que ocurre en un aula concreta. Los propios autores advierten que estos conceptos provienen, en su mayor parte, del estudio de “relaciones diádicas madre/hijo o adulto/niño” y que en la escuela pueden tener una validez limitada (p. 148). Por su parte, la lista de herramientas psicológicas que recogen incluye “trabajos de arte, esquemas, diagramas, mapas, dibujos” (p. 150), lo que permite una lectura multimodal. Sin embargo, el lenguaje sigue siendo “el instrumento mediador fundamental” (p. 150). La jerarquía entre modos es algo por resolver si quiero apoyarme en este paradigma desde la educación multimodal.</p>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ===================== TRANSFORMAR ===================== -->
+<section id="transformar" class="wrap section cat" data-hints="0" aria-labelledby="t-h">
+  <header class="sec-head">
+    <p class="eyebrow">04 · Transformar</p>
+    <h2 id="t-h">Transformar</h2>
+    <p class="read">¿Qué cambiaría en mi práctica docente si diseño ambientes de aprendizaje multimodales desde esta perspectiva?</p>
+    <span class="scaffold" aria-label="Andamiaje: sin pistas">Andamiaje <i></i><i></i><i></i></span>
+  </header>
+
+  <div class="task">
+    <label for="r-transformar">Si diseñaras una actividad con tecnología digital para un grupo, ¿qué tendría que pasar entre las personas para que no fuera una actividad aislada?</label>
+    <textarea id="r-transformar" data-save placeholder="Escribe aquí tu respuesta."></textarea>
+    <div class="bar">
+      <button class="btn hint" type="button">Pedir una pista</button>
+      <span class="small hint-count"></span>
+      <span class="spacer"></span>
+      <button class="btn reveal-btn" type="button">Comparar con mi lectura</button>
+    </div>
+    <ol class="hints"></ol>
+  </div>
+
+  <div class="reveal" hidden>
+    <div class="yours" hidden><p class="eyebrow">Tu respuesta</p><p></p></div>
+    <p class="context">Contexto: enseño Filosofía en 10.º y 11.º (los dos últimos años de la educación media en Colombia) en el Colegio Guanentá, en San Gil. Los cambios se refieren a recursos virtuales basados en experimentos mentales.</p>
+    <div class="cards">
+      <article class="card" id="t-conjunta">
+        <p class="tag">Cambio 1</p>
+        <h3>Diseñar para el grupo</h3>
+        <p>Grupos pequeños trabajan juntos frente a una sola pantalla. El recurso avanza sólo cuando el grupo toma una decisión y la justifica. Así, pensar con otras personas (el plano interpsicológico) se vuelve parte del diseño.</p>
+      </article>
+      <article class="card" id="t-andamiaje">
+        <p class="tag">Cambio 2</p>
+        <h3>Un andamiaje que se retira</h3>
+        <p>Tres momentos, a partir de las ayudas de la participación guiada <span class="cite">p. 154</span>: primero, un dilema actual que los y las estudiantes reconozcan; luego, pistas que el grupo pide si las necesita y que se van retirando; al final, el grupo inventa su propia versión del experimento mental.</p>
+        <p class="meta">Esta página hace lo mismo con sus pistas: 3, 1 y ninguna.</p>
+      </article>
+      <article class="card" id="t-multimodal">
+        <p class="tag">Cambio 3</p>
+        <h3>Multimodalidad con dirección</h3>
+        <p>La imagen, el sonido y la narración sirven para presentar el experimento mental, pero el recorrido termina en argumentar, hablando y escribiendo. La discusión parte de las posiciones distintas de los grupos, no de una pregunta con una sola respuesta correcta <span class="cite">pp. 154-155</span>.</p>
+      </article>
+      <article class="card" id="t-docentes">
+        <p class="tag">Cambio 4</p>
+        <h3>Los y las docentes</h3>
+        <p>Cubero y Luque piden investigar “en el contexto natural del aula” <span class="cite">p. 149</span>. Por eso pienso en una Investigación Basada en Diseño (IBD): probar el recurso con mis grupos, ajustarlo y volver a probar. También invitar a colegas a usarlo. Sería un primer paso hacia lo que Fullan llama reculturización <span class="cite">2002</span>.</p>
+      </article>
+    </div>
+    <details class="full">
+      <summary>Leer el texto completo de Transformar</summary>
+      <div class="body">
+        <p>Mi práctica docente se desarrolla en la asignatura de Filosofía de los grados 10.º y 11.º (los dos últimos años de la educación media colombiana) en el Colegio Guanentá, en San Gil. Incorporar la perspectiva sociocultural en el diseño de recursos virtuales basados en experimentos mentales implicaría, por lo menos, cuatro cambios.</p>
+        <p>El primero es diseñar para la actividad conjunta y no para el usuario aislado. En lugar de un recurso que cada estudiante recorre en su propio dispositivo, el experimento mental se podría probar en grupos pequeños alrededor de una sola pantalla. El recurso sólo avanzaría cuando el grupo tome una decisión y la justifique, de modo que el plano “interpsicológico” dejaría de ser un elemento secundario para convertirse en una condición del diseño.</p>
+        <p>El segundo cambio es un andamiaje que se retira. Cubero y Luque (2015) recogen tres tipos de ayuda en la participación guiada: construir puentes desde el nivel de comprensión del estudiante, estructurar su participación de forma dinámica y traspasar gradualmente el control de la actividad (p. 154). En el recurso que me interesa, eso podría traducirse en tres momentos. Primero, un escenario cercano a un dilema actual que los y las estudiantes reconozcan; luego, pistas o preguntas opcionales que el grupo reciba cuando las necesite y que se van retirando; por último, un cierre en el que el grupo crea su propia variación del experimento mental. Ese posible cierre se basa en dos rasgos de la apropiación que señalan los autores: incluir la herramienta “en el repertorio de prácticas utilizadas” y “compartir su uso con los demás” (p. 154).</p>
+        <p>El tercer cambio es la multimodalidad con dirección. La imagen, el sonido y la narración servirían para construir el escenario del experimento mental, pero el recorrido terminaría en el discurso argumentado, oral y escrito. Si el lenguaje es el mediador fundamental (p. 150), y si la filosofía es una práctica dialógica o discursiva, lo multimodal funcionaría como una vía de entrada a ese discurso. El diálogo, por su parte, no partiría de la pregunta del profesor o de la profesora que espera una respuesta correcta, sino de las posiciones contrapuestas de los grupos. En efecto, la interacción entre iguales pone en marcha la “expresión y reconocimiento de puntos de vista contrapuestos, creación y resolución de conflictos” (pp. 154-155).</p>
+        <p>El cuarto cambio tiene que ver con los y las docentes. Cubero y Luque (2015) reclaman investigación “en el contexto natural del aula” (p. 149), lo que podría respaldar la decisión de seguir una Investigación Basada en Diseño (IBD), con ciclos de prueba y ajuste en mis propios grupos. También puede significar no diseñar solo: invitar a colegas a usar y ajustar el recurso. Sería, por usar el término de Fullan (2002), un primer paso hacia la reculturización.</p>
+        <p>¿Por qué el paradigma sociocultural permite fundamentar estos cambios? Porque desplaza la unidad de diseño: lo que se diseña ya no es un objeto que transmite contenidos, sino una actividad en la que las personas piensan juntas con ayuda de artefactos. Ahora bien, queda una pregunta que no he resuelto y que guiará el diseño: ¿el recurso virtual andamia el aprendizaje filosófico, o sólo lo media mientras el ajuste sigue en manos de quien enseña y del grupo?</p>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ===================== DILEMA ===================== -->
+<section id="dilema" class="wrap section" aria-labelledby="d-h">
+  <header class="sec-head">
+    <p class="eyebrow">05 · Cierre</p>
+    <h2 id="d-h">¿Andamia o sólo media?</h2>
+  </header>
+  <p class="dilema-q"><span class="q">¿El recurso virtual <em>andamia</em> el aprendizaje, o <em>sólo lo media</em><br class="br-wide"> y el ajuste queda en manos de quien enseña y del grupo?</span></p>
+
+  <form class="vote" id="vote">
+    <fieldset class="vote">
+      <legend>Tu posición</legend>
+      <div class="options">
+        <label class="opt"><input type="radio" name="pos" id="pos-andamia" value="Andamia"><span class="big">Andamia</span><span class="desc">El recurso mismo puede ajustar su ayuda y retirarla cuando el grupo avanza.</span></label>
+        <label class="opt"><input type="radio" name="pos" id="pos-media" value="Sólo media"><span class="big">Sólo media</span><span class="desc">El recurso ofrece la herramienta; quienes ajustan la ayuda son quien enseña y el grupo.</span></label>
+      </div>
+    </fieldset>
+    <label class="why-l" for="r-dilema">¿Por qué?</label>
+    <textarea id="r-dilema" data-save placeholder="Explica tu posición en dos o tres líneas."></textarea>
+    <div class="bar">
+      <button class="btn" type="button" id="btn-ver">Ver mi posición</button>
+      <span class="small" id="vote-msg" aria-live="polite"></span>
+    </div>
+  </form>
+
+  <div class="out" id="dilema-out" hidden>
+    <div class="yours"><p class="eyebrow">Tu posición</p><p id="your-pos"></p></div>
+    <div class="mine">
+      <p class="eyebrow">La mía, por ahora</p>
+      <h3>No la he resuelto, y es la pregunta que guiará mi diseño</h3>
+      <p>Ya no pienso en diseñar un objeto que entrega contenidos, sino una actividad en la que las personas piensan juntas con ayuda de herramientas. Las dos respuestas tienen argumentos en este recorrido:</p>
+      <p>Si eliges <strong>andamia</strong>, revisa el <a href="#t-andamiaje" data-open="transformar">segundo cambio de Transformar</a>: un recurso con pistas que se retiran. Si eliges <strong>sólo media</strong>, revisa la <a href="#a-tecnologias" data-open="ampliar">tercera idea de Ampliar</a>: un recurso puede mediar, pero alguien tiene que ajustar su ayuda a cada aula.</p>
+    </div>
+    <div class="forum">
+      <div class="bar"><button class="btn" type="button" id="btn-copy">Copiar mi respuesta</button><span class="msg" id="copy-msg" aria-live="polite"></span></div>
+      <textarea id="copy-box" readonly hidden aria-label="Texto para copiar"></textarea>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== REFERENCIAS ===================== -->
+<section id="referencias" class="wrap section" aria-labelledby="r-h">
+  <header class="sec-head">
+    <p class="eyebrow">Fuentes</p>
+    <h2 id="r-h">Referencias</h2>
+  </header>
+  <ul class="refs">
+    <li>Burbules, N. C., y Callister, T. A. (2001). <em>Educación: Riesgos y promesas de las nuevas tecnologías de la información</em>. Granica.</li>
+    <li>Cubero, R., y Luque, A. (2015). Desarrollo, educación y educación escolar: la teoría sociocultural del desarrollo y del aprendizaje. En C. Coll, J. Palacios y Á. Marchesi (Comps.), <em>Desarrollo psicológico y educación: 2. Psicología de la educación escolar</em> (2.ª ed., pp. 137-156). Alianza Editorial.</li>
+    <li>Dussel, I., y Quevedo, L. A. (2010). <em>Educación y nuevas tecnologías: los desafíos pedagógicos ante el mundo digital</em>. Santillana.</li>
+    <li>Fullan, M. (2002). El significado del cambio educativo: un cuarto de siglo de aprendizaje. <em>Profesorado. Revista de Currículum y Formación del Profesorado, 6</em>(1-2), 1-14.</li>
+    <li>Kolb, D. A. (1984). <em>Experiential learning: Experience as the source of learning and development</em>. Prentice-Hall.</li>
+    <li>Tozzi, M. (2007). Sobre la didáctica del aprendizaje del filosofar (G. Arnaiz, Trad.). <em>Diálogo Filosófico</em>, (68), 207-215.</li>
+  </ul>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Fabián Bautista González · Doctorado en Educación Multimodal, Universidad Autónoma de Querétaro.</p>
+    <p>Recurso de la actividad “Rutina CAT” sobre el paradigma sociocultural. Lo que escribes aquí no se envía a ningún lado: se guarda sólo en tu navegador.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var KEY = "pensar-con-otros:";
+  function load(k){ try { return localStorage.getItem(KEY + k); } catch(e){ return null; } }
+  function save(k, v){ try { localStorage.setItem(KEY + k, v); } catch(e){} }
+  var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- portada ---------- */
+  var heroR = document.getElementById("hero-r");
+  var heroMsgs = {
+    cabeza: "<strong>Es la respuesta más común.</strong> Vygotsky piensa distinto: las formas de pensar más complejas aparecen primero “entre las personas” y sólo después en cada una (Cubero y Luque, 2015, p. 143). La siguiente sección lo muestra.",
+    entre: "<strong>Vygotsky estaría de acuerdo, al menos al principio:</strong> lo que pasa entre las personas después se reconstruye dentro de cada una (Cubero y Luque, 2015, p. 143). La siguiente sección lo muestra."
+  };
+  document.querySelectorAll(".choice").forEach(function(b){
+    b.addEventListener("click", function(){
+      document.querySelectorAll(".choice").forEach(function(o){ o.setAttribute("aria-pressed", o === b ? "true" : "false"); });
+      heroR.innerHTML = heroMsgs[b.dataset.ans];
+    });
+  });
+
+  /* ---------- borradores en el navegador ---------- */
+  document.querySelectorAll("textarea[data-save]").forEach(function(t){
+    var v = load(t.id); if (v) t.value = v;
+    var timer;
+    t.addEventListener("input", function(){ clearTimeout(timer); timer = setTimeout(function(){ save(t.id, t.value); }, 400); });
+  });
+
+  /* ---------- voz interior ---------- */
+  var voz = document.getElementById("voz"), track = document.getElementById("voz-track"),
+      stage = document.getElementById("voz-stage"), steps = document.querySelectorAll("#voz-steps li"),
+      stepBtns = document.querySelectorAll("#voz-stepper button"), plane = document.getElementById("voz-plane"),
+      vozHint = document.getElementById("voz-hint");
+  var useScroll = !reduceMotion && "CSS" in window && CSS.supports("position", "sticky");
+  function setP(p){
+    p = Math.max(0, Math.min(1, p));
+    stage.style.setProperty("--p", p.toFixed(3));
+    var s = p < 0.34 ? 0 : (p < 0.67 ? 1 : 2);
+    steps.forEach(function(li, i){ li.classList.toggle("on", i === s); });
+    stepBtns.forEach(function(b, i){ b.setAttribute("aria-current", i === s ? "true" : "false"); });
+    plane.innerHTML = s === 2 ? "Plano <b>intrapsicológico</b>" : (s === 1 ? "Del plano <b>inter</b> al <b>intra</b>" : "Plano <b>interpsicológico</b>");
+  }
+  function scrollRange(){
+    var r = track.getBoundingClientRect();
+    var top = window.scrollY + r.top;
+    var total = track.offsetHeight - window.innerHeight;
+    return { top: top, total: Math.max(1, total) };
+  }
+  if (useScroll){
+    voz.classList.add("scroll");
+    var ticking = false;
+    var onScroll = function(){
+      if (ticking) return; ticking = true;
+      requestAnimationFrame(function(){
+        var r = track.getBoundingClientRect();
+        var total = track.offsetHeight - window.innerHeight;
+        setP(total > 0 ? (-r.top) / total : 0);
+        ticking = false;
+      });
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    onScroll();
+    stepBtns.forEach(function(b){
+      b.addEventListener("click", function(){
+        var s = +b.dataset.step, rg = scrollRange();
+        var target = [0.12, 0.5, 0.92][s];
+        window.scrollTo({ top: rg.top + rg.total * target, behavior: "smooth" });
+      });
+    });
+  } else {
+    vozHint.textContent = "Elige un momento:";
+    setP(0);
+    stepBtns.forEach(function(b){ b.addEventListener("click", function(){ setP(+b.dataset.step / 2); }); });
+  }
+
+  /* ---------- secciones CAT: pistas que se retiran y comparación ---------- */
+  function openReveal(sec){
+    var rev = sec.querySelector(".reveal"), ta = sec.querySelector("textarea"), y = sec.querySelector(".yours"), rb = sec.querySelector(".reveal-btn");
+    var v = ta.value.trim();
+    if (v){ y.hidden = false; y.querySelector("p:last-child").textContent = v; } else { y.hidden = true; }
+    rev.hidden = false;
+    rb.textContent = "Mi lectura está abierta abajo";
+    rb.disabled = true;
+  }
+  document.querySelectorAll(".cat").forEach(function(sec){
+    var max = +sec.dataset.hints, used = 0,
+        items = sec.querySelectorAll(".hints li"),
+        hb = sec.querySelector(".btn.hint"), hc = sec.querySelector(".hint-count");
+    function upd(){
+      if (max === 0){ hb.disabled = true; hb.textContent = "Sin pistas"; hc.textContent = "Aquí el andamiaje ya se retiró."; return; }
+      var left = max - used;
+      hc.textContent = left ? (left === 1 ? "Queda 1 pista" : "Quedan " + left + " pistas") : "Ya no quedan pistas";
+      hb.disabled = left === 0;
+    }
+    hb.addEventListener("click", function(){ if (used < max){ items[used].hidden = false; used++; upd(); } });
+    upd();
+    sec.querySelector(".reveal-btn").addEventListener("click", function(){
+      openReveal(sec);
+      var first = sec.querySelector(".reveal .cards");
+      if (first) first.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+    });
+  });
+  document.querySelectorAll("a[data-open]").forEach(function(a){
+    a.addEventListener("click", function(){ openReveal(document.getElementById(a.dataset.open)); });
+  });
+
+  /* ---------- dilema ---------- */
+  var form = document.getElementById("vote"), out = document.getElementById("dilema-out"),
+      vmsg = document.getElementById("vote-msg"), yourPos = document.getElementById("your-pos"),
+      why = document.getElementById("r-dilema");
+  var savedPos = load("pos");
+  if (savedPos){ var r0 = form.querySelector('input[value="' + savedPos + '"]'); if (r0) r0.checked = true; }
+  form.querySelectorAll('input[name="pos"]').forEach(function(r){ r.addEventListener("change", function(){ save("pos", r.value); }); });
+  function composed(){
+    var c = form.querySelector('input[name="pos"]:checked');
+    return "Pensar con otros: mi respuesta al dilema\n" +
+      "¿El recurso virtual andamia el aprendizaje, o sólo lo media?\n" +
+      "Mi posición: " + (c ? c.value : "") + "\n" +
+      "Por qué: " + why.value.trim();
+  }
+  form.addEventListener("submit", function(ev){ ev.preventDefault(); });
+  document.getElementById("btn-ver").addEventListener("click", function(){
+    var c = form.querySelector('input[name="pos"]:checked');
+    if (!c){ vmsg.textContent = "Elige primero una de las dos posiciones."; return; }
+    vmsg.textContent = "";
+    yourPos.textContent = c.value + (why.value.trim() ? ". " + why.value.trim() : ".");
+    out.hidden = false;
+    out.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+  });
+  var copyBtn = document.getElementById("btn-copy"), copyMsg = document.getElementById("copy-msg"), copyBox = document.getElementById("copy-box");
+  copyBtn.addEventListener("click", function(){
+    var text = composed();
+    function fallback(){
+      copyBox.hidden = false; copyBox.value = text; copyBox.focus(); copyBox.select();
+      var ok = false; try { ok = document.execCommand("copy"); } catch(e){}
+      copyMsg.textContent = ok ? "Copiado." : "Selecciona el texto de abajo y cópialo.";
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){ copyMsg.textContent = "Copiado."; }, fallback);
+    } else { fallback(); }
+  });
+
+  /* ---------- sección activa en la navegación ---------- */
+  var links = {};
+  document.querySelectorAll(".nav a").forEach(function(a){ links[a.getAttribute("href").slice(1)] = a; });
+  if ("IntersectionObserver" in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (en.isIntersecting){
+          Object.keys(links).forEach(function(k){ links[k].setAttribute("aria-current", k === en.target.id ? "true" : "false"); });
+        }
+      });
+    }, { rootMargin: "-45% 0px -50% 0px" });
+    Object.keys(links).forEach(function(k){ var s = document.getElementById(k); if (s) io.observe(s); });
+  }
+})();
+</script>
+</body>
+</html>
